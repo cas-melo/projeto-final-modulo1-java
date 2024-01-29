@@ -52,7 +52,3 @@ Para utilizar a aplicação, basta executar o método `main` na classe `Main.jav
 ## Contribuição
 
 Sinta-se à vontade para contribuir ou reportar problemas. Basta abrir uma *issue* ou enviar um *pull request*.
-
-## Licença
-
-Este projeto está licenciado sob a [MIT License] - veja o arquivo [LICENSE.md](LICENSE.md) para detalhes.
