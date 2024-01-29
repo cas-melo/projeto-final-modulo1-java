@@ -45,7 +45,7 @@ To use the application, simply execute the `main` method in the `Main.java` clas
 
 *Application*
 
-![Menu](screenshot/Screenshot1.png)
+![Menu](src/screenshot/Screenshot1.png)
 
 
 ## Contribution

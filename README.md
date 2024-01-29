@@ -46,7 +46,7 @@ Para utilizar a aplicação, basta executar o método `main` na classe `Main.jav
 
 *Aplicação*
 
-![Menu](screenshot/Screenshot1.png)
+![Menu](src/screenshot/Screenshot1.png)
 
 
 ## Contribuição
