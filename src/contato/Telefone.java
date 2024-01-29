@@ -2,17 +2,19 @@ package contato;
 
 public class Telefone {
 
-    private static Long id;
+    private static int proximoId = 0;
+    private int id;
     private String ddd;
     private Long numero;
 
 
-    public Telefone(Long id, String ddd, Long numero) {
+    public Telefone(String ddd, Long numero) {
+        this.id = proximoId++;
         this.ddd = ddd;
         this.numero = numero;
     }
 
-    public static Long getId() {
+    public int getId() {
         return id;
     }
 
@@ -35,6 +37,6 @@ public class Telefone {
 
     @Override
     public String toString() {
-        return "ID: " + id + "\nDDD: " + ddd + "\nNúmero: " + numero;
+        return "ID: "  + "\nDDD: " + ddd + "\nNúmero: " + numero;
     }
 }

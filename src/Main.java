@@ -29,7 +29,8 @@ public class Main {
             System.out.println("1 - Adicionar Contato");
             System.out.println("2 - Remover Contato");
             System.out.println("3 - Editar Contato");
-            System.out.println("4 - Sair");
+            System.out.println("4 - Exibir Detalhes do Contato");
+            System.out.println("5 - Sair");
             System.out.print("Escolha uma opção: ");
 
             opcao = scanner.nextInt();
@@ -54,7 +55,6 @@ public class Main {
 
                             Long numeroTelefone = Long.valueOf(numeroTelefoneString);
 
-
                             boolean numeroTelefoneJaExiste = agenda.getContatos().stream()
                                     .anyMatch(contato -> contato.getTelefones().stream()
                                             .anyMatch(telefone -> telefone.getNumero().equals(numeroTelefone)));
@@ -63,13 +63,8 @@ public class Main {
                                 throw new IllegalArgumentException("Este número de telefone já está em uso por outro contato. Por favor, escolha outro número.");
                             }
 
-
-                            Long idTelefone = Telefone.getId();
-                            Telefone novoTelefone = new Telefone(idTelefone, dddTelefone, numeroTelefone);
-
-                            int telefoneId = Math.toIntExact(Telefone.getId());
-
-                            agenda.adicionarTelefoneAContato(telefoneId,novoTelefone);
+                            Telefone novoTelefone = new Telefone(dddTelefone, numeroTelefone);
+                            telefonesNovoContato.add(novoTelefone);
 
                             System.out.print("Deseja adicionar outro número de telefone? (S/N): ");
                             String opcao1 = scanner.nextLine();
@@ -81,8 +76,7 @@ public class Main {
                         }
                     } while (!numeroTelefoneUnico);
 
-                                        int novoId = Contato.getProximoId();
-
+                    int novoId = Contato.getProximoId();
                     agenda.criarContato(novoId, nomeNovoContato, sobrenomeNovoContato, telefonesNovoContato);
 
                     agenda.salvarContatosEmArquivo("src/dados/contatos.txt");
@@ -152,9 +146,9 @@ public class Main {
 
                             switch (opcaoEditar) {
                                 case 1:
-                                    System.out.print("Novo nome (deixe em branco para manter o mesmo): ");
+                                    System.out.print("Novo nome: ");
                                     String novoNome = scanner.nextLine().trim();
-                                    System.out.print("Novo sobrenome (deixe em branco para manter o mesmo): ");
+                                    System.out.print("Novo sobrenome: ");
                                     String novoSobrenome = scanner.nextLine().trim();
 
 
@@ -162,7 +156,126 @@ public class Main {
                                     break;
 
                                 case 2:
-                                    System.out.println("TODO");
+                                    System.out.println("1 - Editar número existente");
+                                    System.out.println("2 - Adicionar novo número");
+                                    System.out.println("3 - Deletar número existente");
+                                    System.out.print("Escolha uma opção: ");
+                                    int opcaoEditarTelefones = scanner.nextInt();
+                                    scanner.nextLine();
+
+                                    try {
+                                        switch (opcaoEditarTelefones) {
+                                            case 1:
+
+
+                                                contatoEditar = null;
+                                                for (Contato contato : agenda.getContatos()) {
+                                                    if (contato.getId() == idContatoEditar) {
+                                                        contatoEditar = contato;
+                                                        break;
+                                                    }
+                                                }
+
+                                                if (contatoEditar != null) {
+                                                    System.out.print("Digite o ID do telefone que deseja editar: ");
+                                                    int idTelefoneEditar = scanner.nextInt();
+                                                    scanner.nextLine();
+
+
+                                                    Telefone telefoneEditar = null;
+                                                    for (Telefone telefone : contatoEditar.getTelefones()) {
+                                                        if (telefone.getId() == idTelefoneEditar) {
+                                                            telefoneEditar = telefone;
+                                                            break;
+                                                        }
+                                                    }
+
+                                                    if (telefoneEditar != null) {
+                                                        System.out.println("Editar número de telefone:");
+                                                        System.out.print("Novo DDD (ou pressione Enter para manter o mesmo): ");
+                                                        String novoDdd = scanner.nextLine().trim();
+                                                        scanner.nextLine();
+
+                                                        System.out.print("Novo número de telefone (ou pressione Enter para manter o mesmo): ");
+                                                        String novoNumeroStr = scanner.nextLine().trim();
+                                                        Long novoNumero = novoNumeroStr.isEmpty() ? telefoneEditar.getNumero() : Long.parseLong(novoNumeroStr);
+
+
+                                                        telefoneEditar.setDdd(novoDdd.isEmpty() ? telefoneEditar.getDdd() : novoDdd);
+                                                        telefoneEditar.setNumero(novoNumero);
+
+                                                        System.out.println("Telefone editado com sucesso!");
+                                                    } else {
+                                                        System.out.println("Telefone não encontrado com o ID fornecido.");
+                                                    }
+                                                } else {
+                                                    System.out.println("Contato não encontrado com o ID fornecido.");
+                                                }
+                                                break;
+                                            case 2:
+                                                System.out.println("Adicionar novo número de telefone:");
+
+
+                                                System.out.print("DDD do novo telefone: ");
+                                                String novoDdd = scanner.nextLine().trim();
+
+
+                                                System.out.print("Número do novo telefone: ");
+                                                Long novoNumero = Long.parseLong(scanner.nextLine().trim());
+
+
+                                                Telefone novoTelefone = new Telefone(novoDdd, novoNumero);
+
+
+                                                agenda.adicionarTelefoneAContato(idContatoEditar, novoTelefone);
+
+                                                System.out.println("Novo número de telefone adicionado com sucesso!");
+                                                break;
+                                            case 3:
+                                                System.out.println("Remover número de telefone existente:");
+
+
+                                                System.out.print("Digite o ID do telefone que deseja remover: ");
+                                                int idTelefoneRemover = scanner.nextInt();
+                                                scanner.nextLine();
+
+
+                                                Contato contatoRemoverTelefone = null;
+                                                for (Contato contato : agenda.getContatos()) {
+                                                    if (contato.getId() == idContatoEditar) {
+                                                        contatoRemoverTelefone = contato;
+                                                        break;
+                                                    }
+                                                }
+
+                                                if (contatoRemoverTelefone != null) {
+
+                                                    Telefone telefoneRemover = null;
+                                                    for (Telefone telefone : contatoRemoverTelefone.getTelefones()) {
+                                                        if (telefone.getId() == idTelefoneRemover) {
+                                                            telefoneRemover = telefone;
+                                                            break;
+                                                        }
+                                                    }
+
+                                                    if (telefoneRemover != null) {
+
+                                                        contatoRemoverTelefone.removerTelefone(telefoneRemover);
+                                                        System.out.println("Número de telefone removido com sucesso!");
+                                                    } else {
+                                                        System.out.println("Telefone não encontrado com o ID fornecido.");
+                                                    }
+                                                } else {
+                                                    System.out.println("Contato não encontrado com o ID fornecido.");
+                                                }
+                                                break;
+                                            default:
+                                                System.out.println("Opção inválida.");
+                                        }
+                                    } catch (InputMismatchException e) {
+                                        System.out.println("Entrada inválida. Certifique-se de fornecer um número válido.");
+                                        scanner.nextLine();
+                                    }
                                     break;
 
                                 default:
@@ -180,11 +293,8 @@ public class Main {
                     }
                     break;
 
-                case 4:
-                    System.out.println("Saindo da aplicação...");
-                    break;
 
-                case 5:
+                case 4:
                     try {
 
                         System.out.print("Digite o ID do contato que deseja ler: ");
@@ -204,6 +314,8 @@ public class Main {
 
                             System.out.println("Detalhes do Contato:");
                             System.out.println(contatoLer.detalhesContato());
+                            scanner.nextLine();
+
                         } else {
                             System.out.println("Contato não encontrado com o ID fornecido.");
                         }
@@ -212,10 +324,15 @@ public class Main {
                         scanner.nextLine();
                     }
                     break;
+
+                case 5:
+                    System.out.println("Saindo da aplicação...");
+                    break;
+
                 default:
                     System.out.println("Opção inválida. Por favor, escolha uma opção válida.");
             }
-        } while (opcao != 4);
+        } while (opcao != 5);
 
         scanner.close();
     }

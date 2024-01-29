@@ -6,7 +6,7 @@ import java.util.List;
 public class Contato {
 
 
-    public static int proximoId = 1;
+    public static int proximoId = 0;
     private int id;
     private String nome;
     private String sobrenome;
@@ -21,7 +21,7 @@ public class Contato {
     }
 
     public static int getProximoId() {
-        return proximoId;
+        return proximoId++;
     }
 
 
@@ -71,6 +71,16 @@ public class Contato {
 
 
     public String detalhesContato() {
-        return "ID: " + id + "\nNome: " + nome + "\nSobrenome: " + sobrenome + "\nTelefones: " + telefones;
+        StringBuilder detalhes = new StringBuilder();
+        detalhes.append("ID: ").append(id).append("\n");
+        detalhes.append("Nome: ").append(nome).append("\n");
+        detalhes.append("Sobrenome: ").append(sobrenome).append("\n");
+        detalhes.append("Telefones:\n");
+        for (Telefone telefone : telefones) {
+            detalhes.append("ID: ").append(telefone.getId()).append("\n");
+            detalhes.append("DDD: ").append(telefone.getDdd()).append("\n");
+            detalhes.append("Número: ").append(telefone.getNumero()).append("\n");
+        }
+        return detalhes.toString();
     }
 }

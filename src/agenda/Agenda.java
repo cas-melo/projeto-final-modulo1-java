@@ -22,9 +22,7 @@ public class Agenda {
 
     public void criarContato(int proximoId, String nome, String sobrenome, List<Telefone> telefones) {
         Contato novoContato = new Contato(proximoId, nome, sobrenome);
-        for (Telefone telefone : telefones) {
-            novoContato.adicionarTelefone(telefone);
-        }
+        novoContato.setTelefones(telefones);
         contatos.add(novoContato);
     }
 
@@ -78,7 +76,21 @@ public class Agenda {
                 int id = Integer.parseInt(partes[0]);
                 String nome = partes[1];
                 String sobrenome = partes[2];
-                Contato contato = new Contato(proximoId, nome, sobrenome);
+
+                Contato contato = new Contato(proximoId++, nome, sobrenome);
+
+
+                if (partes.length > 3) {
+                    String[] telefones = partes[3].split(";");
+                    for (String telefoneStr : telefones) {
+                        String[] telefonePartes = telefoneStr.split("-");
+                        String ddd = telefonePartes[0];
+                        Long numero = Long.parseLong(telefonePartes[1]);
+                        Telefone telefone = new Telefone(ddd, numero);
+                        contato.adicionarTelefone(telefone);
+                    }
+                }
+
                 contatos.add(contato);
             }
         } catch (IOException e) {
@@ -92,11 +104,19 @@ public class Agenda {
         linha.append(contato.getId()).append(",");
         linha.append(contato.getNome()).append(",");
         linha.append(contato.getSobrenome()).append(",");
-        for (Telefone telefone : contato.getTelefones()) {
-            linha.append(Telefone.getId()).append(",");
-            linha.append(telefone.getDdd()).append(",");
-            linha.append(telefone.getNumero()).append(",");
+
+
+        List<Telefone> telefones = contato.getTelefones();
+        if (!telefones.isEmpty()) {
+            for (Telefone telefone : telefones) {
+                linha.append(telefone.getDdd()).append("-");
+                linha.append(telefone.getNumero()).append(";");
+            }
+
+            linha.setLength(linha.length() - 1);
         }
+
         return linha.toString();
     }
+
 }
