@@ -51,7 +51,3 @@ To use the application, simply execute the `main` method in the `Main.java` clas
 ## Contribution
 
 Feel free to contribute or report issues. Just open an issue or send a pull request.
-
-## License
-
-This project is licensed under the [MIT License] - see the [LICENSE.md](LICENSE.md) file for details.
